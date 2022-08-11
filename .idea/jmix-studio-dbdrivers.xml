@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DatabaseDriversConfigurationState">
+    <drivers>
+      <db-driver id="org.postgresql.Driver">
+        <library url="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.postgresql/postgresql/42.3.5/438e339890a7660c88c98dc0e43cd980604d3562/postgresql-42.3.5.jar" />
+      </db-driver>
+    </drivers>
+  </component>
+</project>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        xmlns:c="http://jmix.io/schema/ui/jpql-condition"
+        caption="msg://carExistBrowse.caption"
+        focusComponent="carExistsTable">
+    <data readOnly="true">
+        <collection id="carExistsDc"
+                    class="com.company.accenturejaguarbpm.entity.CarExist">
+            <fetchPlan extends="_base"/>
+            <loader id="carExistsDl">
+                <query>
+                    <![CDATA[select e from CarExist e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <screenSettings id="settingsFacet" auto="true"/>
+    </facets>
+    <actions>
+        <action id="lookupSelectAction"
+                caption="msg:///actions.Select"
+                icon="LOOKUP_OK"
+                primary="true"
+                shortcut="${COMMIT_SHORTCUT}"/>
+        <action id="lookupCancelAction"
+                caption="msg:///actions.Cancel"
+                icon="LOOKUP_CANCEL"/>
+    </actions>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="carExistsTable" spacing="true">
+        <filter id="filter"
+                dataLoader="carExistsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="carExistsTable"
+                    width="100%"
+                    dataContainer="carExistsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="manufacturer"/>
+                <column id="model"/>
+                <column id="year_of_production"/>
+                <column id="warranty_valid"/>
+                <column id="costs_counter"/>
+                <column id="vcode"/>
+            </columns>
+            <simplePagination/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="carExistsTable.create"/>
+                <button id="editBtn" action="carExistsTable.edit"/>
+                <button id="removeBtn" action="carExistsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

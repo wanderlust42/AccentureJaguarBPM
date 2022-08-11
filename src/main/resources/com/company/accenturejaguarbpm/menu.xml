@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<menu-config xmlns="http://jmix.io/schema/ui/menu">
+
+    <menu id="application" caption="msg://com.company.accenturejaguarbpm/menu.application" insertBefore="administration">
+        <item screen="User.browse" caption="msg://com.company.accenturejaguarbpm.screen.user/UserBrowse.caption"/>
+        <item screen="themeSettingsScreen" caption="msg://io.jmix.ui.app.themesettings/themeSettings.caption"/>
+        <item screen="Catalogue.browse"
+              caption="msg://com.company.accenturejaguarbpm.screen.catalogue/catalogueBrowse.menu"/>
+        <item screen="Customer.browse"
+              caption="msg://com.company.accenturejaguarbpm.screen.customer/customerBrowse.menu"/>
+        <item screen="CarExist.browse"
+              caption="msg://com.company.accenturejaguarbpm.screen.carexist/carExistBrowse.menu"/>
+        <item screen="Deal.browse" caption="msg://com.company.accenturejaguarbpm.screen.deal/dealBrowse.menu"/>
+        <item screen="TestDrive.browse"
+              caption="msg://com.company.accenturejaguarbpm.screen.testdrive/testDriveBrowse.menu"/>
+    </menu>
+
+</menu-config>
