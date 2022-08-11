@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:jmix="http://jmix.io/schema/bpm/bpmn" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:flowable="http://flowable.org/bpmn" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.flowable.org/processdef">
+  <collaboration id="Collaboration_1675x8z" name="Customer defined">
+    <participant id="Participant_0q5mr99" name="Car Purchase Customer Journey" processRef="Process_0kannox" />
+  </collaboration>
+  <process id="Process_0kannox" name="Process Dealer Purchase" flowable:candidateStarterUsers="admin,user" jmix:candidateStarterUsersValue="admin,user">
+    <laneSet id="LaneSet_15oeemx">
+      <lane id="Lane_1gcxhm8">
+        <flowNodeRef>Activity_1jl3j68</flowNodeRef>
+        <flowNodeRef>Event_12gvsy8</flowNodeRef>
+        <flowNodeRef>Activity_0gwb645</flowNodeRef>
+      </lane>
+      <lane id="Lane_1o0o0a0">
+        <flowNodeRef>Event_12ofye0</flowNodeRef>
+        <flowNodeRef>Gateway_1oafjqz</flowNodeRef>
+        <flowNodeRef>Activity_0yk3cz5</flowNodeRef>
+        <flowNodeRef>Gateway_02jfi5i</flowNodeRef>
+        <flowNodeRef>Event_1ixx748</flowNodeRef>
+        <flowNodeRef>Event_0idkahz</flowNodeRef>
+        <flowNodeRef>Activity_1yj268n</flowNodeRef>
+        <flowNodeRef>Gateway_12xn49w</flowNodeRef>
+        <flowNodeRef>Event_06ssicu</flowNodeRef>
+        <flowNodeRef>Gateway_064vyq0</flowNodeRef>
+        <flowNodeRef>Event_0q0rk0n</flowNodeRef>
+        <flowNodeRef>Activity_151705n</flowNodeRef>
+        <flowNodeRef>Gateway_0te3s5d</flowNodeRef>
+        <flowNodeRef>Gateway_0ycdgy9</flowNodeRef>
+        <flowNodeRef>Gateway_1pioxn8</flowNodeRef>
+        <flowNodeRef>Event_1yvxaf6</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="Event_12ofye0" name="Identify the Customer">
+      <extensionElements>
+        <jmix:formData type="input-dialog" openMode="DIALOG" businessKey="customerEmail">
+          <jmix:formFields>
+            <jmix:formField id="customerEmail" caption="Customer email" type="string" editable="true" required="true" />
+          </jmix:formFields>
+        </jmix:formData>
+      </extensionElements>
+      <outgoing>Flow_0owq62b</outgoing>
+    </startEvent>
+    <exclusiveGateway id="Gateway_1oafjqz">
+      <incoming>Flow_1miqula</incoming>
+      <outgoing>Flow_1z11phn</outgoing>
+      <outgoing>Flow_1u9im2s</outgoing>
+    </exclusiveGateway>
+    <userTask id="Activity_0yk3cz5" name="Confirm customer" flowable:assignee="${initiator.username}" jmix:assigneeSource="processVariable" jmix:assigneeValue="initiator">
+      <extensionElements>
+        <jmix:formData type="input-dialog" openMode="DIALOG">
+          <jmix:formFields>
+            <jmix:formField id="customer" caption="Customer" type="entity" editable="true" required="false">
+              <jmix:formFieldProperty name="uiComponent" value="entityPicker" />
+              <jmix:formFieldProperty name="entityName" value="Customer" />
+            </jmix:formField>
+          </jmix:formFields>
+          <jmix:formOutcomes>
+            <jmix:formOutcome id="NameYes" caption="Name yes" icon="font-icon:ADDRESS_BOOK" />
+            <jmix:formOutcome id="NameNo" caption="Name no" icon="font-icon:ADDRESS_BOOK" />
+          </jmix:formOutcomes>
+        </jmix:formData>
+      </extensionElements>
+      <incoming>Flow_1z11phn</incoming>
+      <outgoing>Flow_107d4i5</outgoing>
+    </userTask>
+    <exclusiveGateway id="Gateway_02jfi5i">
+      <incoming>Flow_107d4i5</incoming>
+      <outgoing>Flow_18dn6rr</outgoing>
+      <outgoing>Flow_1wjf0cy</outgoing>
+    </exclusiveGateway>
+    <endEvent id="Event_1ixx748">
+      <incoming>Flow_18dn6rr</incoming>
+    </endEvent>
+    <endEvent id="Event_0idkahz" name="Customer not found">
+      <incoming>Flow_1u9im2s</incoming>
+    </endEvent>
+    <serviceTask id="Activity_1yj268n" name="Check the Catalogue available Car" flowable:expression="${catalogueService.findCarInCatalogue(customer, execution.id)}" jmix:taskType="springBean" jmix:beanName="catalogueService">
+      <extensionElements>
+        <jmix:springBean beanName="catalogueService" methodName="findCarInCatalogue">
+          <jmix:methodParam name="customer" type="com.company.accenturejaguarbpm.entity.Customer" isVariable="true">customer</jmix:methodParam>
+          <jmix:methodParam name="executionId" type="java.lang.String" isVariable="true">execution.id</jmix:methodParam>
+        </jmix:springBean>
+      </extensionElements>
+      <incoming>Flow_1wjf0cy</incoming>
+      <outgoing>Flow_0hgbfch</outgoing>
+    </serviceTask>
+    <exclusiveGateway id="Gateway_12xn49w">
+      <incoming>Flow_0hgbfch</incoming>
+      <outgoing>Flow_03wwk19</outgoing>
+      <outgoing>Flow_15em07t</outgoing>
+    </exclusiveGateway>
+    <endEvent id="Event_06ssicu">
+      <incoming>Flow_1ucekal</incoming>
+    </endEvent>
+    <userTask id="Activity_1jl3j68" name="Review the deal" flowable:assignee="${initiator.username}" jmix:assigneeSource="processVariable" jmix:assigneeValue="initiator">
+      <extensionElements>
+        <jmix:formData type="input-dialog" openMode="DIALOG">
+          <jmix:formFields>
+            <jmix:formField id="deal" caption="Deal" type="entity" editable="true" required="false">
+              <jmix:formFieldProperty name="uiComponent" value="entityPicker" />
+              <jmix:formFieldProperty name="entityName" value="Deal" />
+            </jmix:formField>
+          </jmix:formFields>
+        </jmix:formData>
+      </extensionElements>
+      <incoming>Flow_0witi1y</incoming>
+      <outgoing>Flow_024ne1g</outgoing>
+    </userTask>
+    <endEvent id="Event_12gvsy8">
+      <incoming>Flow_024ne1g</incoming>
+    </endEvent>
+    <parallelGateway id="Gateway_064vyq0">
+      <incoming>Flow_15em07t</incoming>
+      <outgoing>Flow_116uau3</outgoing>
+      <outgoing>Flow_1gz3dvt</outgoing>
+    </parallelGateway>
+    <endEvent id="Event_0q0rk0n">
+      <incoming>Flow_03wwk19</incoming>
+    </endEvent>
+    <serviceTask id="Activity_0gwb645" name="Create the Deal record" flowable:type="jmix-create-entity">
+      <extensionElements>
+        <flowable:field name="resultVariable">
+          <flowable:string>deal</flowable:string>
+        </flowable:field>
+        <flowable:field name="entityName">
+          <flowable:string>Deal</flowable:string>
+        </flowable:field>
+        <flowable:field name="entityAttributes">
+          <flowable:string>[{"name":"mature","valueType":"directValue","value":"StatusMature.FIND_CUSTOMER_SENTIMENT"},{"name":"customer","valueType":"expression","value":"${customer}"},{"name":"catalogue","valueType":"expression","value":"${catalogue}"}]</flowable:string>
+        </flowable:field>
+      </extensionElements>
+      <incoming>Flow_0gu5ich</incoming>
+      <outgoing>Flow_0witi1y</outgoing>
+    </serviceTask>
+    <serviceTask id="Activity_151705n" name="Find customer" flowable:expression="${customerValidation.findCustomerByEmail(CustomerEmail)}" flowable:resultVariable="customer" flowable:type="jmix-load-entities-jpql" flowable:useLocalScopeForResultVariable="true" jmix:beanName="customerValidation">
+      <extensionElements>
+        <jmix:springBean beanName="customerValidation" methodName="findCustomerByEmail">
+          <jmix:methodParam name="email" type="java.lang.String" isVariable="true">CustomerEmail</jmix:methodParam>
+        </jmix:springBean>
+        <flowable:field name="jpql">
+          <flowable:string>select c from Customer c where c.email = :email</flowable:string>
+        </flowable:field>
+        <flowable:field name="jpqlParameters">
+          <flowable:string>[{"name":"email","valueType":"processVariable","value":"customerEmail"}]</flowable:string>
+        </flowable:field>
+        <flowable:field name="resultVariable">
+          <flowable:string>customer</flowable:string>
+        </flowable:field>
+        <flowable:field name="saveLoadResultAs">
+          <flowable:string>single-element</flowable:string>
+        </flowable:field>
+      </extensionElements>
+      <incoming>Flow_0owq62b</incoming>
+      <outgoing>Flow_1miqula</outgoing>
+    </serviceTask>
+    <sequenceFlow id="Flow_0witi1y" sourceRef="Activity_0gwb645" targetRef="Activity_1jl3j68" />
+    <sequenceFlow id="Flow_0gu5ich" sourceRef="Gateway_0te3s5d" targetRef="Activity_0gwb645" />
+    <sequenceFlow id="Flow_15em07t" name="Upgrade is available" sourceRef="Gateway_12xn49w" targetRef="Gateway_064vyq0">
+      <extensionElements>
+        <jmix:conditionDetails conditionSource="expression" />
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">${carExist != null}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_09vnta5" name="Warranty is overdue" sourceRef="Gateway_0ycdgy9" targetRef="Gateway_0te3s5d">
+      <extensionElements>
+        <jmix:conditionDetails conditionSource="expression" />
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">${carExist.warranty_valid != true}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0iw30py" name="Costs &#62;4000" sourceRef="Gateway_1pioxn8" targetRef="Gateway_0te3s5d">
+      <extensionElements>
+        <jmix:conditionDetails conditionSource="expression" />
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">${carExist.costs_counter &gt; 4000}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1yqkddv" name="Costs &#60;4000" sourceRef="Gateway_1pioxn8" targetRef="Event_1yvxaf6">
+      <extensionElements>
+        <jmix:conditionDetails conditionSource="expression" />
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">${carExist.costs_counter &lt;= 4000}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1ucekal" name="Warranty is valid" sourceRef="Gateway_0ycdgy9" targetRef="Event_06ssicu">
+      <extensionElements>
+        <jmix:conditionDetails conditionSource="expression" />
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">${carExist.warranty_valid == true}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1gz3dvt" sourceRef="Gateway_064vyq0" targetRef="Gateway_1pioxn8">
+      <extensionElements>
+        <jmix:conditionDetails conditionSource="expression" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1wjf0cy" name="Customer confirmed" sourceRef="Gateway_02jfi5i" targetRef="Activity_1yj268n">
+      <extensionElements>
+        <jmix:conditionDetails conditionSource="userTaskOutcome" conditionType="anyoneCompleted" userTaskId="Activity_0yk3cz5" userTaskOutcome="NameYes" />
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">${execution.getVariable('Activity_0yk3cz5_result') != null &amp;&amp; bpm_UserTaskResults.containsOutcome(execution.getVariable('Activity_0yk3cz5_result'), 'NameYes')}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_024ne1g" sourceRef="Activity_1jl3j68" targetRef="Event_12gvsy8" />
+    <sequenceFlow id="Flow_03wwk19" name="No new Car is available" sourceRef="Gateway_12xn49w" targetRef="Event_0q0rk0n">
+      <extensionElements>
+        <jmix:conditionDetails conditionSource="expression" />
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">${carExist == null}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_116uau3" sourceRef="Gateway_064vyq0" targetRef="Gateway_0ycdgy9">
+      <extensionElements>
+        <jmix:conditionDetails conditionSource="expression" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0hgbfch" name="Upgrade available?" sourceRef="Activity_1yj268n" targetRef="Gateway_12xn49w">
+      <extensionElements>
+        <jmix:conditionDetails conditionSource="expression" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_18dn6rr" name="Customer declined" sourceRef="Gateway_02jfi5i" targetRef="Event_1ixx748">
+      <extensionElements>
+        <jmix:conditionDetails conditionSource="userTaskOutcome" conditionType="anyoneCompleted" userTaskId="Activity_0yk3cz5" userTaskOutcome="NameNo" />
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">${execution.getVariable('Activity_0yk3cz5_result') != null &amp;&amp; bpm_UserTaskResults.containsOutcome(execution.getVariable('Activity_0yk3cz5_result'), 'NameNo')}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_107d4i5" sourceRef="Activity_0yk3cz5" targetRef="Gateway_02jfi5i">
+      <extensionElements>
+        <jmix:conditionDetails conditionSource="expression" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1u9im2s" name="Not found" sourceRef="Gateway_1oafjqz" targetRef="Event_0idkahz">
+      <extensionElements>
+        <jmix:conditionDetails conditionSource="expression" />
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">${customer == null}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1z11phn" name="Found" sourceRef="Gateway_1oafjqz" targetRef="Activity_0yk3cz5">
+      <extensionElements>
+        <jmix:conditionDetails conditionSource="expression" />
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">${customer != null}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1miqula" sourceRef="Activity_151705n" targetRef="Gateway_1oafjqz">
+      <extensionElements>
+        <jmix:conditionDetails conditionSource="expression" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0owq62b" sourceRef="Event_12ofye0" targetRef="Activity_151705n">
+      <extensionElements>
+        <jmix:conditionDetails conditionSource="expression" />
+      </extensionElements>
+    </sequenceFlow>
+    <parallelGateway id="Gateway_0te3s5d">
+      <incoming>Flow_0iw30py</incoming>
+      <incoming>Flow_09vnta5</incoming>
+      <outgoing>Flow_0gu5ich</outgoing>
+    </parallelGateway>
+    <exclusiveGateway id="Gateway_0ycdgy9">
+      <incoming>Flow_116uau3</incoming>
+      <outgoing>Flow_1ucekal</outgoing>
+      <outgoing>Flow_09vnta5</outgoing>
+    </exclusiveGateway>
+    <exclusiveGateway id="Gateway_1pioxn8">
+      <incoming>Flow_1gz3dvt</incoming>
+      <outgoing>Flow_1yqkddv</outgoing>
+      <outgoing>Flow_0iw30py</outgoing>
+    </exclusiveGateway>
+    <endEvent id="Event_1yvxaf6">
+      <incoming>Flow_1yqkddv</incoming>
+    </endEvent>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_process">
+    <bpmndi:BPMNPlane id="BPMNPlane_process" bpmnElement="Collaboration_1675x8z">
+      <bpmndi:BPMNShape id="Participant_0q5mr99_di" bpmnElement="Participant_0q5mr99" isHorizontal="true">
+        <omgdc:Bounds x="109" y="-20" width="1391" height="785" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_1o0o0a0_di" bpmnElement="Lane_1o0o0a0" isHorizontal="true">
+        <omgdc:Bounds x="139" y="-20" width="1361" height="445" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_1gcxhm8_di" bpmnElement="Lane_1gcxhm8" isHorizontal="true">
+        <omgdc:Bounds x="139" y="425" width="1361" height="340" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0owq62b_di" bpmnElement="Flow_0owq62b">
+        <omgdi:waypoint x="187" y="114" />
+        <omgdi:waypoint x="244" y="114" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1miqula_di" bpmnElement="Flow_1miqula">
+        <omgdi:waypoint x="344" y="114" />
+        <omgdi:waypoint x="407" y="114" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1z11phn_di" bpmnElement="Flow_1z11phn">
+        <omgdi:waypoint x="457" y="114" />
+        <omgdi:waypoint x="512" y="114" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="469" y="83" width="32" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1u9im2s_di" bpmnElement="Flow_1u9im2s">
+        <omgdi:waypoint x="432" y="139" />
+        <omgdi:waypoint x="432" y="207" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="447" y="172" width="48" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_107d4i5_di" bpmnElement="Flow_107d4i5">
+        <omgdi:waypoint x="612" y="114" />
+        <omgdi:waypoint x="637" y="114" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18dn6rr_di" bpmnElement="Flow_18dn6rr">
+        <omgdi:waypoint x="662" y="139" />
+        <omgdi:waypoint x="662" y="207" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="677" y="161" width="48" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0hgbfch_di" bpmnElement="Flow_0hgbfch">
+        <omgdi:waypoint x="951" y="45" />
+        <omgdi:waypoint x="1006" y="45" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="966" y="1" width="50" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_116uau3_di" bpmnElement="Flow_116uau3">
+        <omgdi:waypoint x="816" y="185" />
+        <omgdi:waypoint x="945" y="185" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="987" y="130" width="56" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_03wwk19_di" bpmnElement="Flow_03wwk19">
+        <omgdi:waypoint x="1056" y="45" />
+        <omgdi:waypoint x="1173" y="45" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1076" y="1" width="70" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_024ne1g_di" bpmnElement="Flow_024ne1g">
+        <omgdi:waypoint x="441" y="535" />
+        <omgdi:waypoint x="513" y="535" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wjf0cy_di" bpmnElement="Flow_1wjf0cy">
+        <omgdi:waypoint x="691" y="115" />
+        <omgdi:waypoint x="741" y="115" />
+        <omgdi:waypoint x="741" y="35" />
+        <omgdi:waypoint x="851" y="35" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="686" y="31" width="49" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1gz3dvt_di" bpmnElement="Flow_1gz3dvt">
+        <omgdi:waypoint x="791" y="210" />
+        <omgdi:waypoint x="791" y="325" />
+        <omgdi:waypoint x="925" y="325" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ucekal_di" bpmnElement="Flow_1ucekal">
+        <omgdi:waypoint x="970" y="210" />
+        <omgdi:waypoint x="970" y="255" />
+        <omgdi:waypoint x="1013" y="255" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="999" y="213" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yqkddv_di" bpmnElement="Flow_1yqkddv">
+        <omgdi:waypoint x="950" y="350" />
+        <omgdi:waypoint x="950" y="377" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="978" y="353" width="63" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0iw30py_di" bpmnElement="Flow_0iw30py">
+        <omgdi:waypoint x="975" y="325" />
+        <omgdi:waypoint x="1270" y="325" />
+        <omgdi:waypoint x="1270" y="210" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1092" y="307" width="63" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09vnta5_di" bpmnElement="Flow_09vnta5">
+        <omgdi:waypoint x="995" y="185" />
+        <omgdi:waypoint x="1245" y="185" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1022" y="156" width="56" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15em07t_di" bpmnElement="Flow_15em07t">
+        <omgdi:waypoint x="1031" y="70" />
+        <omgdi:waypoint x="1031" y="105" />
+        <omgdi:waypoint x="791" y="105" />
+        <omgdi:waypoint x="791" y="155" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1054" y="71" width="54" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0gu5ich_di" bpmnElement="Flow_0gu5ich">
+        <omgdi:waypoint x="1295" y="185" />
+        <omgdi:waypoint x="1381" y="185" />
+        <omgdi:waypoint x="1381" y="455" />
+        <omgdi:waypoint x="241" y="455" />
+        <omgdi:waypoint x="241" y="495" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0witi1y_di" bpmnElement="Flow_0witi1y">
+        <omgdi:waypoint x="291" y="535" />
+        <omgdi:waypoint x="341" y="535" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_12ofye0_di" bpmnElement="Event_12ofye0">
+        <omgdc:Bounds x="151" y="96" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="142" y="58.5" width="54" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1oafjqz_di" bpmnElement="Gateway_1oafjqz" isMarkerVisible="true">
+        <omgdc:Bounds x="407" y="89" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0csgb30_di" bpmnElement="Activity_0yk3cz5">
+        <omgdc:Bounds x="512" y="74" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_02jfi5i_di" bpmnElement="Gateway_02jfi5i" isMarkerVisible="true">
+        <omgdc:Bounds x="637" y="89" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1ixx748_di" bpmnElement="Event_1ixx748">
+        <omgdc:Bounds x="644" y="207" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0idkahz_di" bpmnElement="Event_0idkahz">
+        <omgdc:Bounds x="414" y="207" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="399" y="250" width="67" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ifflhf_di" bpmnElement="Activity_1yj268n">
+        <omgdc:Bounds x="851" y="5" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_12xn49w_di" bpmnElement="Gateway_12xn49w" isMarkerVisible="true">
+        <omgdc:Bounds x="1006" y="20" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_06ssicu_di" bpmnElement="Event_06ssicu">
+        <omgdc:Bounds x="1013" y="237" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1dscssp_di" bpmnElement="Activity_1jl3j68">
+        <omgdc:Bounds x="341" y="495" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_12gvsy8_di" bpmnElement="Event_12gvsy8">
+        <omgdc:Bounds x="513" y="517" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1eqr8br_di" bpmnElement="Gateway_064vyq0">
+        <omgdc:Bounds x="766" y="160" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0q0rk0n_di" bpmnElement="Event_0q0rk0n">
+        <omgdc:Bounds x="1173" y="27" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0tuhkh0_di" bpmnElement="Activity_0gwb645">
+        <omgdc:Bounds x="191" y="495" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0a00gyk_di" bpmnElement="Activity_151705n">
+        <omgdc:Bounds x="244" y="74" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_163lj63_di" bpmnElement="Gateway_0te3s5d">
+        <omgdc:Bounds x="1245" y="160" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0ycdgy9_di" bpmnElement="Gateway_0ycdgy9" isMarkerVisible="true">
+        <omgdc:Bounds x="945" y="160" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1pioxn8_di" bpmnElement="Gateway_1pioxn8" isMarkerVisible="true">
+        <omgdc:Bounds x="925" y="300" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1yvxaf6_di" bpmnElement="Event_1yvxaf6">
+        <omgdc:Bounds x="932" y="377" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
